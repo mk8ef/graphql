@@ -91,17 +91,13 @@ const mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
         addUser: {
-            // type here refers to the type of data we will
-            // return from the resolve function --> You don't always
-            // return the same type as the one youre working on, although here we do
-
             type: UserType,
             args: {
                 firstName: {type: new GraphQLNonNull(GraphQLString)},
                 age: {type: new GraphQLNonNull(GraphQLInt)},
                 companyId: {type: GraphQLString}
             },
-            resolve(parentValue, args) {
+            resolve(parentValue, {firstName, age}) {
                 return axios.post(`http://localhost:3000/users`, {firstName, age})
                     .then(res => res.data);
             }
@@ -115,14 +111,8 @@ const mutation = new GraphQLObjectType({
 
 
 
-
-
-
-
-
-
-
-
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: mutation
+
 });
